@@ -44,7 +44,7 @@ function create_dealer_card (first: boolean, num: number) {
                 ..e111111111111111111111e..
                 ...eeeeeeeeeeeeeeeeeeeee...
                 `, SpriteKind.Player)
-            dealer_ace = true
+            dealer_ace += 1
         } else if (card_number == 2) {
             dealer_card = sprites.create(img`
                 ...eeeeeeeeeeeeeeeeeeeee...
@@ -632,11 +632,9 @@ function draw_cards () {
         create_card(2 + draws)
         player_sum += card_number
         draws += 1
-        if (card_number == 11 && player_sum > 21) {
+        while (player_ace > 0 && player_sum > 21) {
             player_sum += 0 - 10
-        }
-        if (player_ace == true && player_sum > 21) {
-            player_sum += 0 - 10
+            player_ace += -1
         }
         if (player_sum > 21) {
             game.splash("BUST!")
@@ -692,7 +690,7 @@ function create_card (num2: number) {
             ..e111111111111111111111e..
             ...eeeeeeeeeeeeeeeeeeeee...
             `, SpriteKind.Player)
-        player_ace = true
+        player_ace += 1
     } else if (card_number == 2) {
         player_card = sprites.create(img`
             ...eeeeeeeeeeeeeeeeeeeee...
@@ -1227,10 +1225,9 @@ function dealer_draw_cards () {
         dealer_sum += card_number
         dealer_draws += 1
         pause(100)
-        if (card_number == 11 && dealer_sum > 21) {
+        while (dealer_ace > 0 && dealer_sum > 21) {
             dealer_sum += 0 - 10
-        } else if (dealer_ace == true) {
-            dealer_sum += 0 - 10
+            dealer_ace += -1
         }
         if (dealer_sum > 21) {
             game.splash("DEALER BUST!")
@@ -1243,6 +1240,8 @@ function dealer_draw_cards () {
 }
 function start_game () {
     if (can_start_game) {
+        dealer_ace = 0
+        player_ace = 0
         can_start_game = false
         create_card(0)
         player_sum = card_number
@@ -1370,12 +1369,12 @@ function start_game () {
 let dealer_draws = 0
 let dealer_sum = 0
 let player_card: Sprite = null
-let player_ace = false
+let player_ace = 0
 let player_sum = 0
 let draws = 0
 let hidden_dealer_card: Sprite = null
 let _10_j_q_k = 0
-let dealer_ace = false
+let dealer_ace = 0
 let dealer_card: Sprite = null
 let card_number = 0
 let can_start_game = false
